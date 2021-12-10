@@ -14,7 +14,7 @@ authors = ["Pierre Baconnier"]
 
 **Initial release: 7 June 2014; 7 years ago**
 
-Aujourd'hui, en 2021, Kubernetes est devenu incontournable et la plupart des cloud providers proposent désormais des solutions Kubernetes hébergées.
+Aujourd'hui, en 2021, force est de constater que Kubernetes est devenu incontournable et la plupart des cloud providers proposent désormais des solutions Kubernetes hébergées.
 
 Il faudra attendre **2013 pour que Google lance sa première offre IAAS** en ayant été ralenti par l'échec de son PAAS AppEngine.
 
@@ -56,23 +56,3 @@ Parce que cette centralisation ne permet pas une bonne organisation ni d'être s
 Cela entraînera nécessairement des contraintes sécuritaiers de type enforcement des pod security rules, non-root user ou encore priviledged escalation files par exemple.
 
 Moins de latitude sur un unique cluster car tout le monde a un besoin différent donc c'est la règle de la contrainte la plus forte va s'appliquer a tous.
-
-## Kubernetes Solutions
-
-### K8S certified providers
-
-[Marketplace Solutions](https://v1-18.docs.kubernetes.io/fr/docs/setup/pick-right-solution)
-
-#### Le cas OVH: implémentation d'offre KAAS basée sur OpenStack et Platform9 solution
-
-Dans le cadre de la Kubecon 2019, OVH annonce le déploiement de Kubernetes sur ses serveurs dédiés suite à un partenariat avec **Platform9**. Par conséquent, il est désormais le fournisseur européen qui propose le choix le plus diversifié en matière de déploiement Kubernetes.
-
-### Bare-metal
-
-En bare-metal l'expérience montre qu'avec CoreOs racheté par Redhat et intégré a Openshift, cette solution ainsi que Pivotal et Rancher sont les plus représentées sur le marché français.
-
-## CNCF
-
-### Certification
-
-https://training.linuxfoundation.org/training/kubernetes-fundamentals/

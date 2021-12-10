@@ -17,18 +17,20 @@ authors = ["Pierre Baconnier"]
 > permettant de l'arrimer ou de le transborder d'un véhicule a l'autre." 
 *Définition d'un container maritime*
 
+Nous allons voir que ces propriétés se retrouvent dans la conception informatique du container.
+
 C'est tout simplement faire tourner un ensemble de processus systèmes ou métier au sein d'un même environnement, isolé.
 
-Une des problématique de la virtualisation par hyperviseur est la problématique de la boîte noire. Difficile de recenser l'ensemble des composants, ce qui peut être critique en cas de panne de la VM, impossible donc d'en déterminer l'état.
+Une des problématique de la virtualisation par hyperviseur est celle de la boîte noire. Difficile de recenser l'ensemble des composants, ce qui peut être critique en cas de panne de la VM, impossible donc d'en déterminer l'état.
 
 Comment faire également lorsque les ressources ne sont pas partagées, comme le cache des applications par exemple ? 
 
-Physiquement, un container est un système de fichiers contenant l'ensemble des binaires dont ont a besoin pour faire tourner
+Physiquement, un container est un système de fichiers contenant l'ensemble des binaires dont on a besoin pour faire tourner
 notre application.
 
-L'image apporte également des métadonnées tels des layers dont ont peut déterminer la composition exacte.
+L'image apporte également des métadonnées rattachées aux layers dont on peut ensuite déterminer la composition exacte.
 
-A la fin on a une brique atomique, je n'ai pas besoin de savoir quelles sont les couches successivement empilées du container.
+A la fin j'ai une brique atomique, je n'ai pas besoin de savoir quelles sont les couches successivement empilées du container.
 
 Cela permet de résoudre la problématique du packaging OS (.deb, .rpm, etc.), non agnostique.
 
@@ -50,6 +52,6 @@ Exemple de toolbox minimaliste: [Busybox](https://www.busybox.net)
 
 Outil d'introspection des layers des images: [Dive](https://github.com/wagoodman/dive)
 
-Container runtime de docker: [Containerd](https://containerd.ios)
+Container runtime de docker: [Containerd](https://containerd.io)
 
 Docker multistage building: [Multistage building](https://docs.docker.com/develop/develop-images/multistage-build)
