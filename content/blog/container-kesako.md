@@ -1,5 +1,5 @@
 +++
-title = "Containers Kesacko"
+title = "Containers, Kesako ?"
 description = "Opinionated explanation of Linux Containers concepts"
 date = 2021-12-09T09:19:42+00:00
 updated = 2021-12-09T09:19:42+00:00
@@ -10,7 +10,7 @@ template = "blog/page.html"
 authors = ["Pierre Baconnier"]
 +++
 
-## What is a container
+## What is a container ?
 
 > "Caisson métallique parallélépipédique conçu pour le transport de marchandise par différents mode de transports.
 > Ses dimensions ont été standardisées au niveau international et il est muni a tous les angles de pièces de préemption

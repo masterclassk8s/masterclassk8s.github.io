@@ -1,5 +1,5 @@
 +++
-title = "Kubernetes Kesacko"
+title = "Kubernetes, Kesako ?"
 description = "Opinionated explanation of Kubernetes concepts"
 date = 2021-12-09T09:19:45+00:00
 updated = 2021-12-09T09:19:45+00:00
@@ -10,7 +10,7 @@ template = "blog/page.html"
 authors = ["Pierre Baconnier"]
 +++
 
-## What is Kubernetes (Controller-centric opinionated explanation)
+## What is Kubernetes ? (controller-centric opinionated explanation)
 
 **Initial release: 7 June 2014; 7 years ago**
 
