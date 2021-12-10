@@ -24,7 +24,7 @@ authors = ["Pierre Baconnier"]
 
 ## CNCF Landscape
 
-<img src="https://masterclassK8s.github.io/blog/cncf-landscape.jpg" alt="CNCF_Landscape"> 
+<img src="https://masterclassK8s.github.io/blog/cncf-landscape.jpg" alt="CNCF_Landscape" width="800" height="1000"> 
 
 
 ## First cluster: Show cluster info
