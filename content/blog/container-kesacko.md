@@ -1,8 +1,8 @@
 +++
 title = "Containers Kesacko"
 description = "Opinionated explanation of Linux Containers concepts"
-date = 2021-04-20T09:19:42+00:00
-updated = 2021-04-20T09:19:42+00:00
+date = 2021-12-09T09:19:42+00:00
+updated = 2021-12-09T09:19:42+00:00
 draft = false
 template = "blog/page.html"
 

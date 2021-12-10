@@ -63,7 +63,7 @@ timezone = "Europe/Paris"
 
 # Edit page on reposity or not
 edit_page = false
-docs_repo = "https://github.com/masterclassk8s/masterclassk8s.github.io"
+docs_repo = "https://masterclassk8s.github.io/docs"
 repo_branch = "main"
 
 ## Math settings
