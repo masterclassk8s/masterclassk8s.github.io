@@ -1,8 +1,8 @@
 +++
 title = "Authors"
-description = "The authurs of the blog articles."
-date = 2021-04-01T08:00:00+00:00
-updated = 2021-04-01T08:00:00+00:00
+description = "The authors of these articles."
+date = 2021-12-09T13:49:54+00:00
+updated = 2021-12-09T13:49:54+00:00
 draft = false
 
 # If add a new author page in this section, please add a new item,
@@ -12,7 +12,7 @@ draft = false
 #
 # Note: We use quoted keys here.
 [extra.author_pages]
-"aaran-xu" = "authors/aaran-xu.md"
+"pierre-baconnier" = "authors/pierre-baconnier.md"
 +++
 
-The authors of the blog articles.
+The authors of these articles.
