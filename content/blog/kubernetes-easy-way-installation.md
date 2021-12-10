@@ -12,7 +12,7 @@ authors = ["Pierre Baconnier"]
 
 ## Installation with kubeadm
 
-[https://v1-18.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/](https://v1-18.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/)
+[Create cluster from scratch with kubeadm](https://v1-18.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/)
 
 ## Installation on AWS via kops
 
@@ -23,5 +23,7 @@ authors = ["Pierre Baconnier"]
 ## Kubernetes on openstack
 
 [Installing Kubernetes on OpenStack](https://superuser.openstack.org/articles/run-your-kubernetes-cluster-on-openstack-in-production/)
+
 [Installing Kubernetes on OpenStack and Bare-metal](https://www.openstack.org/videos/summits/berlin-2018/running-kubernetes-on-openstack-and-bare-metal)
+
 [Installing Kubernetes on OpenStack and AWS the hard way](https://automationlogic.com/installing-open-stack-on-aws-by-george-tarnaras/)
