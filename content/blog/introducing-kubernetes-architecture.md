@@ -14,15 +14,18 @@ authors = ["Pierre Baconnier"]
 
 ### Component layers architecture
 
-<img src="https://masterclassK8s.github.io/content/blog/control-plane.png" alt="Simple_Control_Plane_Schema"> 
+<img src="https://masterclassk8s.github.io/blog/control-plane.png" alt="Simple_Control_Plane_Schema"> 
+
 
 ### Macro architecture 
 
-<img src="https://masterclassK8s.github.io/content/blog/Kubernetes-101-Architecture-Diagram.jpg" alt="Other_Control_Plane_Schema"> 
+<img src="https://masterclassK8s.github.io/blog/Kubernetes-101-Architecture-Diagram.jpg" alt="Other_Control_Plane_Schema"> 
+
 
 ## CNCF Landscape
 
-<img src="https://masterclassK8s.github.io/content/blog/cncf-landscape.jpg" alt="CNCF_Landscape"> 
+<img src="https://masterclassK8s.github.io/blog/cncf-landscape.jpg" alt="CNCF_Landscape"> 
+
 
 ## First cluster: Show cluster info
 
