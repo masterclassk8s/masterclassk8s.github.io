@@ -31,21 +31,43 @@ Par exemple:
 - "J'aimerai un storage avec une rétention de 6 mois"
 - "J'aimerai que des mises a jour soit déployées mais n'impactent que les applications du ns 'web' ou correspondant au tag 'web'"
 
+## Terminologie
+
+Kubernetes est un système d’orchestration qui permet de déployer et de gérer des conteneurs. Les conteneurs ne sont pas gérés individuellement. Au lieu de cela ils font partie d’un ensemble plus grand appelé **Pod**.
+
+Un Pod se compose d’un ou de plusieurs conteneurs qui partagent une adresse IP, un accès au stockage et un espace de nommage.
+
+**L’orchestration est gérée par des contrôleurs**. Ces contrôleurs sont compilés dans le kube-controller-manager.
+
+Un service est une abstraction qui **définit un ensemble logique de Pods**.
+
+Le ReplicaSet est un contrôleur qui déploie et redémarre les pods. Le ReplicaSet démarre ou arrête des conteneurs. **Il est la pour vérifier que le bon nombre de conteneurs est actif**.
+
+Il y a aussi des **Jobs and CronJobs** pour s’occuper de tâches uniques ou récurrentes.
+
+Gérer facilement des milliers de Pods sur des centaines de nœuds peut s’avérer difficile. 
+Pour faciliter la gestion il faut utiliser des labels. Les labels sont des chaînes arbitraires qui font partie des métadonnées de l’objet. Les labels peuvent être utilisés pour changer l’état des objets sans avoir à en connaître les noms individuels ou les UIDs.
+
+## Le state
+
 On va distinguer la notion de spec de la notion de statut.
 
 S'il réussi a converger à l'issue de sa boucle de réconciliation, l'état est appliqué et le résultat retourné à l'api server.
 
 Il était très compliqué d'atteindre l'indempotence avec Puppet ou Chef par exemple, car outre l'effet snowflake, certains composants tel le réseau on-premise, n'étaient pas prévus pour être indompotents.
 
-Deux machines, 2 versions ne vont pas nécessairement réagir de la même façon, c'est l'effet snowflake car tous les flocons se ressemblent et c'est très compliqué a distinguer/troubleshooter sur des milliers de machines de production.
+Deux machines, 2 versions ne vont pas nécessairement réagir de la même façon. C'est l'effet snowflake car tous les flocons se ressemblent et il devient presque impossible distinguer/troubleshooter les différences sur des milliers de machines de production.
 
-Kubernetes répond a ce problème car il maintient l'état le retourne après action. On a donc un "avant" et un "après".
+Kubernetes répond a ce problème car il maintient l'état et le retourne après action. On a donc un *avant* et un *après*.
 
 Les pratiques de Kube sont basées sur Google mais également sur beaucoup d'autres suggestions de la communauté.
 
 L'organe de certification de la CNCF permet d'assurer que toutes les solutions qui sont vendues sont compatibles.
 
-On a un cluster ETCD qui sert a la persistence de l'état. L'API server est une "sorte de gardien du temple".
+On a un cluster ETCD qui sert a la persistence de l'état. 
+
+L'API server est en somme un "gardien du temple" qui s'assure de la validité des requêtes émises.
+
 
 ### Une certaine approche des problèmes
 
@@ -55,4 +77,4 @@ Parce que cette centralisation ne permet pas une bonne organisation ni d'être s
 
 Cela entraînera nécessairement des contraintes sécuritaiers de type enforcement des pod security rules, non-root user ou encore priviledged escalation files par exemple.
 
-Moins de latitude sur un unique cluster car tout le monde a un besoin différent donc c'est la règle de la contrainte la plus forte va s'appliquer a tous.
+On aura donc moins de latitude sur un unique cluster car tout le monde a un besoin différent donc c'est la règle de la contrainte la plus forte va s'appliquer a tous.
