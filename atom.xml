@@ -1,0 +1,883 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="fr">
+	<title>MasterClass K8S</title>
+	<subtitle>MasterClass K8S is documentation website of eponym course using Zola Adidoks and Github Pages</subtitle>
+	<link href="https://masterclassk8s.github.io/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://masterclassk8s.github.io"/>
+	<generator uri="https://www.getzola.org/">Zola</generator>
+	<updated>2021-12-23T13:49:54+00:00</updated>
+	<id>https://masterclassk8s.github.io/atom.xml</id>
+	<entry xml:lang="fr">
+		<title>Cloud Basics</title>
+		<published>2021-12-16T09:19:56+00:00</published>
+		<updated>2021-12-16T09:19:56+00:00</updated>
+		<link href="https://masterclassk8s.github.io/blog/cloud-basics/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/blog/cloud-basics/</id>
+		<content type="html">&lt;h1 id=&quot;cloud-basics&quot;&gt;Cloud basics&lt;&#x2F;h1&gt;
+</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>Stateful K8S applications in Amazon EKS</title>
+		<published>2021-12-13T13:49:54+00:00</published>
+		<updated>2021-12-23T13:49:54+00:00</updated>
+		<link href="https://masterclassk8s.github.io/blog/sts/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/blog/sts/</id>
+		<content type="html">&lt;h2 id=&quot;k8s-storage-types&quot;&gt;K8S Storage types&lt;&#x2F;h2&gt;
+&lt;p&gt;https:&#x2F;&#x2F;www.nebulaworks.com&#x2F;insights&#x2F;posts&#x2F;leveraging-aws-ebs-for-kubernetes-persistent-volumes&#x2F;&lt;&#x2F;p&gt;
+&lt;p&gt;One such type of persistent volume is the &lt;strong&gt;AWSElasticBlockStore&lt;&#x2F;strong&gt; which is the type this blog will focus on.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;create-ec2-block-volume&quot;&gt;Create ec2 block volume&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;aws&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; ec2 create-volume&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --availability-zone&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=eu-west-1a&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --size&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=10&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --volume-type&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=gp2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;aws&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; ec2 attach-volume&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --device&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; &#x2F;dev&#x2F;xvdf&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --instance-id &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;lt;MASTER NODE ID&amp;gt; --volume-id &amp;lt;YOUR VOLUME ID&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; mkfs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -t&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; xfs &#x2F;dev&#x2F;&amp;lt;NAME OF VOLUME FROM PREV STEP&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;create-and-delete-mysql-resources&quot;&gt;Create and delete mysql resources&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; apply&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -f&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;kubernetes&#x2F;website&#x2F;main&#x2F;content&#x2F;en&#x2F;examples&#x2F;application&#x2F;mysql&#x2F;mysql-deployment.yaml&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; apply&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -f&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;kubernetes&#x2F;website&#x2F;main&#x2F;content&#x2F;en&#x2F;examples&#x2F;application&#x2F;mysql&#x2F;mysql-pv.yaml&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; describe deployment mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; run&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -it --rm --image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=mysql:5.6&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --restart&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=Never mysql-client -- mysql -h mysql -ppassword&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; delete deployment,svc mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; delete pvc mysql-pv-claim&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; delete pv mysql-pv-volume&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h2 id=&quot;steps-for-dynamic-storage-provisioning&quot;&gt;Steps for Dynamic Storage Provisioning&lt;&#x2F;h2&gt;
+&lt;p&gt;L&#x27;un des inconvénients de la méthode ci-dessus est que l&#x27;opérateur doit créer lui-même la ressource de stockage sur un fournisseur de cloud computing, puis la lier à un volume persistant. Une fois cela fait, le développeur peut alors créer la réclamation du volume persistant pour utiliser ledit PV déployé. Cependant, il existe un moyen de créer des ressources de stockage à la volée en utilisant des classes de stockage. 
+Cela fonctionne de la manière suivante: la classe de stockage provisionne la ressource de stockage nécessaire sur le cloud, en utilisant le provisionneur spécifié. Pour que cela fonctionne, le cluster doit disposer des autorisations IAM appropriées afin de déployer les ressources adéquates.&lt;&#x2F;p&gt;
+&lt;p&gt;Ces objets de classe de stockage sont déclarés comme suit (notez que c&#x27;est le format pour une classe de stockage utilisant EBS. Pour plus de détails sur d&#x27;autres fournisseurs de cloud, consultez ce lien):
+&lt;a href=&quot;https:&#x2F;&#x2F;unofficial-kubernetes.readthedocs.io&#x2F;en&#x2F;latest&#x2F;concepts&#x2F;storage&#x2F;persistent-volumes&quot;&gt;Persistent Volumes and specific storage classes&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Dans ce type de configuration (aws-ebs) créer un volume avant le PVC n&#x27;est pas une obligation.
+En effet une des méthodes les plus usitées consiste à claim de la ressource de stockage par le biais du PVC qui ira automatiquement créer un volume en maintenant le même cycle de vie par association des labels.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;create-dynamic-volume&quot;&gt;Create Dynamic volume&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;em&gt;dync-sc.yaml&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;storage.k8s.io&#x2F;v1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;StorageClass&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ebs-storage-class&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;provisioner&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kubernetes.io&#x2F;aws-ebs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;parameters&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;type&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;io1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;iopsPerGB&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;fsType&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;xfs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;dyn-sc-pvc.yaml&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;PersistentVolumeClaim&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;v1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ebs-pvc&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;namespace&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;default&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;accessModes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ReadWriteOnce&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;resources&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;requests&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;storage&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;5Gi&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;storageClassName&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ebs-storage-class&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;mysql-service.yaml&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;v1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Service&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;port&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3306&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;selector&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;clusterIP&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;10.100.2.23&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;mysql-deployment.yaml&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;apps&#x2F;v1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Deployment&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;selector&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;matchLabels&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;strategy&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;type&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Recreate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;template&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;labels&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;containers&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql:5.6 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# base image, not customized by configmap&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;env&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;MYSQL_ROOT_PASSWORD&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;valueFrom&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;secretKeyRef&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+              &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;secret-mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+              &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;password&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;containerPort&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3306&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;volumeMounts&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql-pvc&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;mountPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;var&#x2F;lib&#x2F;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;secret-volume&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;secret&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;secretName&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;secret-mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql-pvc&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;persistentVolumeClaim&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;claimName&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ebs-pvc&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;secret.yaml&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;v1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Secret&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;secret-mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;username&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;root&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;password&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;dmFsdWUtMKDo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;single-deployment-file&quot;&gt;Single deployment file&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;storage.k8s.io&#x2F;v1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;StorageClass&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ebs-storage-class&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;provisioner&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kubernetes.io&#x2F;aws-ebs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;parameters&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;type&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;io1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;iopsPerGB&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;fsType&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;xfs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+---&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;PersistentVolumeClaim&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;v1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ebs-pvc&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;namespace&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;default&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;accessModes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ReadWriteOnce&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;resources&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;requests&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;storage&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;5Gi&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;storageClassName&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ebs-storage-class&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+---&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;v1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Service&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;port&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3306&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;selector&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;clusterIP&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;10.100.2.23&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+---&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;apps&#x2F;v1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Deployment&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;selector&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;matchLabels&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;strategy&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;type&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Recreate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;template&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;labels&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;containers&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql:5.6 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# base image, not customized by configmap&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;env&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;MYSQL_ROOT_PASSWORD&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;valueFrom&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;secretKeyRef&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+              &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;secret-mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+              &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;password&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;containerPort&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3306&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;volumeMounts&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql-pvc&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;mountPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;var&#x2F;lib&#x2F;mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;secret-volume&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;secret&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;secretName&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;secret-mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql-pvc&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;persistentVolumeClaim&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;claimName&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ebs-pvc&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+---&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;v1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Secret&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;secret-mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;username&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;root&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;password&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;dmFsdWUtMKDo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>Authors</title>
+		<published>2021-12-09T13:49:54+00:00</published>
+		<updated>2021-12-09T13:49:54+00:00</updated>
+		<link href="https://masterclassk8s.github.io/authors/pierre-baconnier/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/authors/pierre-baconnier/</id>
+		<content type="html">&lt;p&gt;Creator of https:&#x2F;&#x2F;masterclassk8s.github.io&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;masterclassk8s&quot;&gt;@masterclassk8s&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>Helm</title>
+		<published>2021-12-09T13:49:54+00:00</published>
+		<updated>2021-12-23T13:49:54+00:00</updated>
+		<link href="https://masterclassk8s.github.io/blog/helm/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/blog/helm/</id>
+		<content type="html">&lt;h2 id=&quot;installing-helm&quot;&gt;Installing Helm&lt;&#x2F;h2&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;curl -fsSL -o&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; get_helm.sh https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;helm&#x2F;helm&#x2F;main&#x2F;scripts&#x2F;get-helm-3&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;chmod&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 700 get_helm.sh&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;.&#x2F;get_helm.sh&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;helm-on-windows&quot;&gt;Helm on Windows&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-pwsh&quot; data-lang=&quot;pwsh&quot;&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString(&amp;#39;https:&#x2F;&#x2F;community.chocolatey.org&#x2F;install.ps1&amp;#39;))&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-pwsh&quot; data-lang=&quot;pwsh&quot;&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;choco install kubernetes-helm&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h2 id=&quot;testing-helm-chart-swaggerui&quot;&gt;Testing helm-chart (swaggerui)&lt;&#x2F;h2&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;helm&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; repo add cetic https:&#x2F;&#x2F;cetic.github.io&#x2F;helm-charts&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;helm&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; repo update&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;helm&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; install&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; my-release cetic&#x2F;swaggerui&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# Validate deployment&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; get deploy my-release-swaggerui&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;NAME&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;                   READY   UP-TO-DATE   AVAILABLE   AGE&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;my-release-swaggerui&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;   1&#x2F;1     1            1           70s&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; describe po my-release-swaggerui-558b4b6c4c-dg4gz&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Name:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;         my-release-swaggerui-558b4b6c4c-dg4gz&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Namespace:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;    kube-system&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Priority:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;     0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Node:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;         docker-desktop&#x2F;192.168.65.4&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Start&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Time:   Thu, 23 Dec 2021 18:45:30 +0100&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Labels:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;       app=swaggerui&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+              &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pod-template-hash&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;558b4b6c4c&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+              &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;release&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;my-release&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Annotations:  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;lt;none&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Status:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;       Running&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;IP:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;           10.1.0.38&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;IPs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;IP:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;           10.1.0.38&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Controlled&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; By:  ReplicaSet&#x2F;my-release-swaggerui-558b4b6c4c&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Containers:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;swaggerui:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Container&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; ID:  docker:&#x2F;&#x2F;91abf3ee29e672d301859f38d77a4974ac2d6512e90a56e1c822c8f339a1ec36&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Image:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;         swaggerapi&#x2F;swagger-ui&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; ID:      docker-pullable:&#x2F;&#x2F;swaggerapi&#x2F;swagger-ui@sha256:286447c2dc3c545317c88bcdf02fc9e80b91ffd1fbb2e8805963af6c693b0306&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Port:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;          8080&#x2F;TCP&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Host&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Port:     0&#x2F;TCP&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Command:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;&#x2F;bin&#x2F;sh&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;-c&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Args:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;mkdir&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; &#x2F;api-doc &amp;amp;&amp;amp; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;wget&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; http:&#x2F;&#x2F;petstore.swagger.io&#x2F;v2&#x2F;swagger.json&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -O&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; &#x2F;api-doc&#x2F;openapi.json &amp;amp;&amp;amp; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apk&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; update &amp;amp;&amp;amp; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apk&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; add jq &amp;amp;&amp;amp; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;jq &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;.servers += [{&amp;quot;url&amp;quot;:&amp;quot;http:&#x2F;&#x2F;www.google.be&amp;quot;,&amp;quot;description&amp;quot;:&amp;quot;helm-online&amp;quot;}]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39; &#x2F;api-doc&#x2F;openapi.json &amp;gt; json.tmp &amp;amp;&amp;amp; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;mv&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; json.tmp &#x2F;api-doc&#x2F;openapi.json &amp;amp;&amp;amp; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;&#x2F;usr&#x2F;share&#x2F;nginx&#x2F;run.sh&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;State:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;          Running&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Started:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;      Thu, 23 Dec 2021 18:45:41 +0100&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Ready:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;          True&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Restart&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Count:  0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Liveness:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;       tcp-socket :http delay=0s timeout=1s period=10s &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;#success=1 #failure=3&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;    Environment:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;SWAGGER_JSON:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  &#x2F;api-doc&#x2F;openapi.json&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Mounts:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;&#x2F;var&#x2F;run&#x2F;secrets&#x2F;kubernetes.io&#x2F;serviceaccount&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; from kube-api-access-8jthw (ro)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Conditions:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Type&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;              Status&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Initialized&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;       True&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Ready&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;             True&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ContainersReady&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;   True&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;PodScheduled&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;      True&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Volumes:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kube-api-access-8jthw:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Type:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;                    Projected (a volume that contains injected data from multiple sources)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;TokenExpirationSeconds:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  3607&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ConfigMapName:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;           kube-root-ca.crt&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ConfigMapOptional:       &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;lt;nil&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;DownwardAPI:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;             true&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;QoS&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Class:                   BestEffort&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Node-Selectors:              &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;lt;none&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Tolerations:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;                 node.kubernetes.io&#x2F;not-ready:NoExecute op=Exists for 300s&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+                             &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;node.kubernetes.io&#x2F;unreachable:NoExecute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; op=Exists for 300s&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Events:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Type&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;    Reason     Age   From               Message&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;----&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;    ------     ----  ----               -------&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Normal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  Scheduled  88s   default-scheduler  Successfully assigned kube-system&#x2F;my-release-swaggerui-558b4b6c4c-dg4gz to docker-desktop&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Normal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  Pulling    87s   kubelet            Pulling image &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;swaggerapi&#x2F;swagger-ui&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Normal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  Pulled     77s   kubelet            Successfully pulled image &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;swaggerapi&#x2F;swagger-ui&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; in 9.528573212s&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Normal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  Created    77s   kubelet            Created container swaggerui&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Normal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  Started    77s   kubelet            Started container swaggerui&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>Introducing Kubernetes Architecture</title>
+		<published>2021-12-09T13:49:54+00:00</published>
+		<updated>2021-12-09T13:49:54+00:00</updated>
+		<link href="https://masterclassk8s.github.io/blog/introducing-kubernetes-architecture/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/blog/introducing-kubernetes-architecture/</id>
+		<content type="html">&lt;h2 id=&quot;kubernetes-architecture&quot;&gt;Kubernetes Architecture&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;component-layers-architecture&quot;&gt;Component layers architecture&lt;&#x2F;h3&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;masterclassk8s.github.io&#x2F;blog&#x2F;control-plane.png&quot; alt=&quot;Simple_Control_Plane_Schema&quot;&gt; 
+&lt;h3 id=&quot;macro-architecture&quot;&gt;Macro architecture&lt;&#x2F;h3&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;masterclassK8s.github.io&#x2F;blog&#x2F;Kubernetes-101-Architecture-Diagram.jpg&quot; alt=&quot;Other_Control_Plane_Schema&quot;&gt; 
+&lt;h2 id=&quot;kubernetes-solutions&quot;&gt;Kubernetes Solutions&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;k8s-certified-providers&quot;&gt;K8S certified providers&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;v1-18.docs.kubernetes.io&#x2F;fr&#x2F;docs&#x2F;setup&#x2F;pick-right-solution&quot;&gt;Marketplace Solutions&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;managed-solutions&quot;&gt;Managed Solutions&lt;&#x2F;h4&gt;
+&lt;h4 id=&quot;le-cas-ovh-implementation-d-offre-kaas-basee-sur-openstack-et-platform9-solution&quot;&gt;Le cas OVH: implémentation d&#x27;offre KAAS basée sur OpenStack et Platform9 solution&lt;&#x2F;h4&gt;
+&lt;p&gt;Dans le cadre de la Kubecon 2019, OVH annonce le déploiement de Kubernetes sur ses serveurs dédiés suite à un partenariat avec &lt;strong&gt;Platform9&lt;&#x2F;strong&gt;. Par conséquent, il est désormais le fournisseur européen qui propose le choix le plus diversifié en matière de déploiement Kubernetes.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;le-cas-bare-metal&quot;&gt;Le cas Bare-metal&lt;&#x2F;h4&gt;
+&lt;p&gt;En bare-metal l&#x27;expérience montre qu&#x27;avec CoreOs racheté par Redhat et intégré a Openshift, cette solution ainsi que Pivotal et Rancher sont les plus représentées sur le marché français.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;cncf&quot;&gt;CNCF&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;cncf-landscape&quot;&gt;CNCF Landscape&lt;&#x2F;h3&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;masterclassK8s.github.io&#x2F;blog&#x2F;cncf-landscape.jpg&quot; alt=&quot;CNCF_Landscape&quot; width=&quot;940&quot; height=&quot;800&quot;&gt; 
+&lt;h3 id=&quot;certification&quot;&gt;Certification&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;training.linuxfoundation.org&#x2F;training&#x2F;kubernetes-fundamentals&#x2F;&quot;&gt;https:&#x2F;&#x2F;training.linuxfoundation.org&#x2F;training&#x2F;kubernetes-fundamentals&#x2F;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;control-plane-components&quot;&gt;Control Plane components&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;At least, Kubernetes worker nodes must be owned 3 system prcocessus and 1 container runtime &lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Le Control Plane est constitué des éléments suivants:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;cluster etcd: &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Un stockage simple et distribué de valeurs de clés qui est utilisé pour stocker les données du cluster Kubernetes (telles que le nombre de pods, leur état, l&#x27;espace de noms, etc), les objets API et les détails de la découverte de services. Pour des raisons de sécurité, il n&#x27;est accessible qu&#x27;à partir du serveur d&#x27;API. etc. etcd permet de notifier au cluster les changements de configuration à l&#x27;aide de surveillants. Les notifications sont des requêtes API sur chaque nœud du cluster etcd pour déclencher la mise à jour des informations dans le stockage du nœud.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;kube-apiserver:&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Le serveur API Kubernetes est l&#x27;entité de gestion centrale qui reçoit toutes les demandes REST de modifications (aux pods, services, ensembles de réplication&#x2F;contrôleurs et autres), servant de front-end au cluster. C&#x27;est également le seul composant qui communique avec le cluster etcd, s&#x27;assurant que les données sont stockées dans etcd et sont en accord avec les détails des services des pods déployés.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;kube-controller-manager:&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Exécute un certain nombre de processus de contrôle distincts en arrière-plan (par exemple, le contrôleur de réplication contrôle le nombre de replica dans un pod, le contrôleur de endpoints remplit les objets endpints comme les services et les pods) pour réguler l&#x27;état partagé du cluster et effectuer des tâches de routine. Lorsqu&#x27;un changement dans la configuration d&#x27;un service se produit (par exemple, le remplacement de l&#x27;image à partir de laquelle les pods sont exécutés, ou la modification des paramètres dans le fichier yaml de configuration), le contrôleur repère le changement et commence à travailler vers le nouvel état souhaité.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;cloud-controller-manager:&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Le responsable de la gestion des processus du contrôleur qui dépendent du cloud provider sous-jacent (le cas échéant). Par exemple, lorsqu&#x27;un contrôleur doit vérifier si un nœud a été résilié ou configurer des routes, des équilibreurs de charge ou des volumes dans l&#x27;infrastructure du cloud provider, tout cela est géré par le cloud provider.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;kube-scheduler:&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Aide à planifier les pods (un groupe de conteneurs co-localisés à l&#x27;intérieur desquels nos processus d&#x27;application sont exécutés) sur les différents nœuds en fonction de l&#x27;utilisation des ressources. Il lit les exigences opérationnelles du service et le planifie sur le nœud le mieux adapté. Par exemple, si l&#x27;application a besoin de 1 Go de mémoire et de 2 cœurs CPU, les pods de cette application seront planifiés sur un nœud disposant au moins de ces ressources. Le planificateur s&#x27;exécute chaque fois qu&#x27;il est nécessaire de planifier des pods. Le planificateur doit connaître les ressources totales disponibles ainsi que les ressources allouées aux charges de travail existantes sur chaque nœud.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>Kubernetes Tooling</title>
+		<published>2021-12-09T09:19:56+00:00</published>
+		<updated>2021-12-23T09:19:56+00:00</updated>
+		<link href="https://masterclassk8s.github.io/blog/kubernetes-tools/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/blog/kubernetes-tools/</id>
+		<content type="html">&lt;h2 id=&quot;krew-plugin-manager-for-kubernetes&quot;&gt;Krew: plugin manager for Kubernetes&lt;&#x2F;h2&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;set &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;-x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;cd &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;mktemp -d&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; &amp;amp;&amp;amp;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;OS&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;uname &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;tr &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;[:upper:]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39; &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;[:lower:]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; &amp;amp;&amp;amp;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ARCH&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;uname -m &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sed -e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;s&#x2F;x86_64&#x2F;amd64&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;s&#x2F;\(arm\)\(64\)\?.*&#x2F;\1\2&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;s&#x2F;aarch64$&#x2F;arm64&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; &amp;amp;&amp;amp;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;KREW&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;krew-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;OS&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;}_&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ARCH&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; &amp;amp;&amp;amp;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;curl -fsSLO &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;kubernetes-sigs&#x2F;krew&#x2F;releases&#x2F;latest&#x2F;download&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;KREW&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;}.tar.gz&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; &amp;amp;&amp;amp;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;tar&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; zxvf &amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;KREW&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;}.tar.gz&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; &amp;amp;&amp;amp;
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;.&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;KREW&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; install krew
+)
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cat &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;lt;&amp;lt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;EOF &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&#x2F;.bashrc 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;export PATH=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;KREW_ROOT&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:-$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;HOME&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;.krew}&#x2F;bin:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;PATH&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;
+EOF&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h2 id=&quot;kubectx-kubens&quot;&gt;Kubectx + Kubens&lt;&#x2F;h2&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; krew install ctx
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; krew install ns
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h2 id=&quot;konfig&quot;&gt;Konfig&lt;&#x2F;h2&gt;
+&lt;p&gt;Le plugin konfig va nous servir a exporter une configuration cluster présente dans un fichier de structure kubeconfig et le copier dans &lt;em&gt;~&#x2F;.kube&#x2F;config&lt;&#x2F;em&gt;. De cette façon, les binaires kubectx ou kubie auront accès au contexte et nous pourrons ainsi passer d&#x27;un contexte à l&#x27;autre sans jamais passer la variable d&#x27;environnment &lt;strong&gt;KUBECONFIG&lt;&#x2F;strong&gt;. &lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; krew install konfig
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;konfig&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; import &#x2F;tmp&#x2F;custom-cluster-KuBeConFig
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;konfig&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; import&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --save&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; &#x2F;tmp&#x2F;custom-cluster-KuBeConFig
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubie&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; ctx custom-cluster
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; get po&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -A
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h2 id=&quot;kubie&quot;&gt;Kubie&lt;&#x2F;h2&gt;
+&lt;p&gt;Réunit les commandes &lt;code&gt;kubectx&lt;&#x2F;code&gt; + &lt;code&gt;kubens&lt;&#x2F;code&gt; dans un seul binaire (et peut permettre par exemple d&#x27;exécuter des commandes extérieures au contexte kube actuel).&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;curl -sS&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; https:&#x2F;&#x2F;github.com&#x2F;sbstp&#x2F;kubie&#x2F;releases&#x2F;download&#x2F;v0.16.0&#x2F;kubie-linux-amd64 | &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;bash
+chmod&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; +x kubie-linux-amd64
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;mv&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; kubie-linux-amd64 &#x2F;usr&#x2F;local&#x2F;bin&#x2F;kubie
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;some-examples&quot;&gt;some examples&lt;&#x2F;h3&gt;
+&lt;p&gt;Changer de contexte courant:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubie&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; ctx kolo@kolorado.us-east-2.eksctl.io
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Afficher les namespaces du contexte courant:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubie&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; ns
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Exécuter une commande kubectl sur un contexte accessible:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubie&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; exec kolo@kolorado.us-east-2.eksctl.io kube-system kubectl get pods
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h2 id=&quot;k9s&quot;&gt;K9s&lt;&#x2F;h2&gt;
+&lt;p&gt;Visualiseur en shell console pour Kubernetes:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;curl -sS&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; https:&#x2F;&#x2F;webinstall.dev&#x2F;k9s | &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;bash
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;export PATH=&amp;#39;&#x2F;home&#x2F;pbackz&#x2F;.local&#x2F;bin:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;PATH&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; &amp;gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&#x2F;.bashrc
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# List all available CLI options
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;k9s&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; help
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# To get info about K9s runtime (logs, configs, etc..)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;k9s info
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# To run K9s in a given namespace
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;k9s&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -n&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; mycoolns
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# Start K9s in an existing KubeConfig context
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;k9s&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --context&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; coolCtx
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# Start K9s in readonly mode - with all cluster modification commands disabled
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;k9s&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --readonly
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>Kubernetes basics</title>
+		<published>2021-12-09T09:19:50+00:00</published>
+		<updated>2021-12-23T09:19:50+00:00</updated>
+		<link href="https://masterclassk8s.github.io/blog/kubernetes-basics/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/blog/kubernetes-basics/</id>
+		<content type="html">&lt;h2 id=&quot;testing-first-cluster-show-cluster-info&quot;&gt;Testing first cluster: Show cluster info&lt;&#x2F;h2&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;controlplane&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; $ kubectl cluster-info
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Kubernetes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; master is running at https:&#x2F;&#x2F;172.17.0.10:6443
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;KubeDNS&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; is running at https:&#x2F;&#x2F;172.17.0.10:6443&#x2F;api&#x2F;v1&#x2F;namespaces&#x2F;kube-system&#x2F;services&#x2F;kube-dns:dns&#x2F;proxy
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h2 id=&quot;deploying-in-kube&quot;&gt;Deploying in Kube&lt;&#x2F;h2&gt;
+&lt;p&gt;Comment on spawn un container dans Kube ?
+C&#x27;est décrire l&#x27;état final qu&#x27;on veut dans Kubernetes.
+Kubernetes tentera de converger vers cet état lors de sa boucle de réconciliation.&lt;&#x2F;p&gt;
+&lt;p&gt;On lui demande le nombre de replica que l&#x27;on souhaite pour une même ressource.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;1st case: deploying in specific limited namespace&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;2nd case: &lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;deployment-tools&quot;&gt;Deployment tools&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;CD (PAAS over Kube)&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Helm&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Helmfile&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;some-useful-commands&quot;&gt;Some useful commands&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;em&gt;Joblike not restarting pod&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; run&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -i -t&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; busybox&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=busybox&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --restart&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=Never
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Expose deployment&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; expose deployment nginx&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --port&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=80&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --target-port&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=8000
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;kubernetes.io&#x2F;docs&#x2F;tasks&#x2F;run-application&#x2F;horizontal-pod-autoscale&#x2F;&quot;&gt;Horizontal Pod Autoscale&lt;&#x2F;a&gt;
+&lt;em&gt;Autoscale configuration for deployment&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; autoscale rs nginx&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --max&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=5&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --cpu-percent&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=80
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Manual scale for deployment&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; scale&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --current-replicas&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --replicas&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=3 deploy&#x2F;nginx
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;List PersistentVolumes sorted by capacity&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; get pv&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --sort-by&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=.spec.capacity.storage
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Get the version label of all pods with label app=mysql&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; get pods&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --selector&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=app=mysql&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -o &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;\
+  jsonpath=&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{.items[*].metadata.labels.version}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>Kubernetes, Kesako ?</title>
+		<published>2021-12-09T09:19:45+00:00</published>
+		<updated>2021-12-23T09:19:45+00:00</updated>
+		<link href="https://masterclassk8s.github.io/blog/kubernetes-kesako/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/blog/kubernetes-kesako/</id>
+		<content type="html">&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;strong&gt;Initial release: 7 June 2014; 7 years ago&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Aujourd&#x27;hui, en 2021, force est de constater que Kubernetes est devenu incontournable et la plupart des cloud providers proposent désormais des solutions Kubernetes hébergées.&lt;&#x2F;p&gt;
+&lt;p&gt;Il faudra attendre &lt;strong&gt;2013 pour que Google lance sa première offre IAAS&lt;&#x2F;strong&gt; en ayant été ralenti par l&#x27;échec de son PAAS AppEngine.&lt;&#x2F;p&gt;
+&lt;p&gt;Un des enjeux de K8S fut de réussir a mixer la flexibilité du IAAS et la facilité d&#x27;accès, la descriptabilité du PAAS, ce que l&#x27;on pourrait appeler l&#x27;IPAAS (merci à @Guilhem pour ce terme).&lt;&#x2F;p&gt;
+&lt;p&gt;Il fallait donc un standrad pour l&#x27;orchestration, une API qui puisse gérer l&#x27;ensemble de ces caractéristiques.&lt;&#x2F;p&gt;
+&lt;p&gt;Kubernetes est strictement impératif, je demande un état, je me fiche de connaître les étapes intermédiaires.&lt;&#x2F;p&gt;
+&lt;p&gt;Par exemple:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;quot;J&#x27;aimerai un espace isolé dont les applications n&#x27;utilisent que 4Go de RAM et 2 CPU&amp;quot;&lt;&#x2F;li&gt;
+&lt;li&gt;&amp;quot;J&#x27;aimerai une base de données répliquée 2 fois&amp;quot;&lt;&#x2F;li&gt;
+&lt;li&gt;&amp;quot;J&#x27;aimerai un storage avec une rétention de 6 mois&amp;quot;&lt;&#x2F;li&gt;
+&lt;li&gt;&amp;quot;J&#x27;aimerai que des mises a jour soit déployées mais n&#x27;impactent que les applications du ns &#x27;web&#x27; ou correspondant au tag &#x27;web&#x27;&amp;quot;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;terminologie&quot;&gt;Terminologie&lt;&#x2F;h2&gt;
+&lt;p&gt;Kubernetes est un système d’orchestration qui permet de déployer et de gérer des conteneurs. Les conteneurs ne sont pas gérés individuellement. Au lieu de cela ils font partie d’un ensemble plus grand appelé &lt;strong&gt;Pod&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Un Pod se compose d’un ou de plusieurs conteneurs qui partagent une adresse IP, un accès au stockage et un espace de nommage.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;L’orchestration est gérée par des contrôleurs&lt;&#x2F;strong&gt;. Ces contrôleurs sont compilés dans le kube-controller-manager.&lt;&#x2F;p&gt;
+&lt;p&gt;Un service est une abstraction qui &lt;strong&gt;définit un ensemble logique de Pods&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Le ReplicaSet est un contrôleur qui déploie et redémarre les pods. Le ReplicaSet démarre ou arrête des conteneurs. &lt;strong&gt;Il est la pour vérifier que le bon nombre de conteneurs est actif&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Il y a aussi des &lt;strong&gt;Jobs and CronJobs&lt;&#x2F;strong&gt; pour s’occuper de tâches uniques ou récurrentes.&lt;&#x2F;p&gt;
+&lt;p&gt;Gérer facilement des milliers de Pods sur des centaines de nœuds peut s’avérer difficile. 
+Pour faciliter la gestion il faut utiliser des labels. Les labels sont des chaînes arbitraires qui font partie des métadonnées de l’objet. Les labels peuvent être utilisés pour changer l’état des objets sans avoir à en connaître les noms individuels ou les UIDs.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;le-state&quot;&gt;Le state&lt;&#x2F;h2&gt;
+&lt;p&gt;On va distinguer la notion de spec de la notion de statut.&lt;&#x2F;p&gt;
+&lt;p&gt;S&#x27;il réussi a converger à l&#x27;issue de sa boucle de réconciliation, l&#x27;état est appliqué et le résultat retourné à l&#x27;api server.&lt;&#x2F;p&gt;
+&lt;p&gt;Il était très compliqué d&#x27;atteindre l&#x27;indempotence avec Puppet ou Chef par exemple, car outre l&#x27;effet snowflake, certains composants tel le réseau on-premise, n&#x27;étaient pas prévus pour être indompotents.&lt;&#x2F;p&gt;
+&lt;p&gt;Deux machines, 2 versions ne vont pas nécessairement réagir de la même façon. C&#x27;est l&#x27;effet snowflake car tous les flocons se ressemblent et il devient presque impossible distinguer&#x2F;troubleshooter les différences sur des milliers de machines de production.&lt;&#x2F;p&gt;
+&lt;p&gt;Kubernetes répond a ce problème car il maintient l&#x27;état et le retourne après action. On a donc un &lt;em&gt;avant&lt;&#x2F;em&gt; et un &lt;em&gt;après&lt;&#x2F;em&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Les pratiques de Kube sont basées sur Google mais également sur beaucoup d&#x27;autres suggestions de la communauté.&lt;&#x2F;p&gt;
+&lt;p&gt;L&#x27;organe de certification de la CNCF permet d&#x27;assurer que toutes les solutions qui sont vendues sont compatibles.&lt;&#x2F;p&gt;
+&lt;p&gt;On a un cluster ETCD qui sert a la persistence de l&#x27;état. &lt;&#x2F;p&gt;
+&lt;p&gt;L&#x27;API server est en somme un &amp;quot;gardien du temple&amp;quot; qui s&#x27;assure de la validité des requêtes émises.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;une-certaine-approche-des-problemes&quot;&gt;Une certaine approche des problèmes&lt;&#x2F;h3&gt;
+&lt;p&gt;A quoi sert d&#x27;avoir plusieurs clusters quand on pourrait tout mutualiser sur un cluster&#x2F;context&#x2F;tenant ?&lt;&#x2F;p&gt;
+&lt;p&gt;Parce que cette centralisation ne permet pas une bonne organisation ni d&#x27;être scalable simplement ni de patcher efficacement.&lt;&#x2F;p&gt;
+&lt;p&gt;Cela entraînera nécessairement des contraintes sécuritaiers de type enforcement des pod security rules, non-root user ou encore priviledged escalation files par exemple.&lt;&#x2F;p&gt;
+&lt;p&gt;On aura donc moins de latitude sur un unique cluster car tout le monde a un besoin différent donc c&#x27;est la règle de la contrainte la plus forte va s&#x27;appliquer a tous.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>Containers, Kesako ?</title>
+		<published>2021-12-09T09:19:42+00:00</published>
+		<updated>2021-12-09T09:19:42+00:00</updated>
+		<link href="https://masterclassk8s.github.io/blog/container-kesako/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/blog/container-kesako/</id>
+		<content type="html">&lt;h2 id=&quot;what-is-a-container&quot;&gt;What is a container ?&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;quot;Caisson métallique parallélépipédique conçu pour le transport de marchandise par différents mode de transports.
+Ses dimensions ont été standardisées au niveau international et il est muni a tous les angles de pièces de préemption
+permettant de l&#x27;arrimer ou de le transborder d&#x27;un véhicule a l&#x27;autre.&amp;quot; 
+&lt;em&gt;Définition d&#x27;un container maritime&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Nous allons voir que ces propriétés se retrouvent dans la conception informatique du container.&lt;&#x2F;p&gt;
+&lt;p&gt;C&#x27;est tout simplement faire tourner un ensemble de processus systèmes ou métier au sein d&#x27;un même environnement, isolé.&lt;&#x2F;p&gt;
+&lt;p&gt;Une des problématique de la virtualisation par hyperviseur est celle de la boîte noire. Difficile de recenser l&#x27;ensemble des composants, ce qui peut être critique en cas de panne de la VM, impossible donc d&#x27;en déterminer l&#x27;état.&lt;&#x2F;p&gt;
+&lt;p&gt;Comment faire également lorsque les ressources ne sont pas partagées, comme le cache des applications par exemple ? &lt;&#x2F;p&gt;
+&lt;p&gt;Physiquement, un container est un système de fichiers contenant l&#x27;ensemble des binaires dont on a besoin pour faire tourner
+notre application.&lt;&#x2F;p&gt;
+&lt;p&gt;L&#x27;image apporte également des métadonnées rattachées aux layers dont on peut ensuite déterminer la composition exacte.&lt;&#x2F;p&gt;
+&lt;p&gt;A la fin j&#x27;ai une brique atomique, je n&#x27;ai pas besoin de savoir quelles sont les couches successivement empilées du container.&lt;&#x2F;p&gt;
+&lt;p&gt;Cela permet de résoudre la problématique du packaging OS (.deb, .rpm, etc.), non agnostique.&lt;&#x2F;p&gt;
+&lt;p&gt;Les containers sont immutables, ils ne laissent rien derrière eux, ont un format autosufisant.&lt;&#x2F;p&gt;
+&lt;p&gt;Les développeurs peuvent passer d&#x27;un langage a l&#x27;autre pour les applications sans jamais impacter l&#x27;infrastructure de PROD.&lt;&#x2F;p&gt;
+&lt;p&gt;C&#x27;est toujours un &#x27;runner&#x27; de container tel containerd qui execute le processus sur l&#x27;hôte mais on se fiche désormais de savoir quel est le launcher sous le container (npm, shell, cargo, etc.).&lt;&#x2F;p&gt;
+&lt;p&gt;Les containers amènent de l&#x27;auditabilité en production.&lt;&#x2F;p&gt;
+&lt;p&gt;Autour de cette infrastructure, d&#x27;autres composants, tel un orchestrateur peuvent être intégrés.&lt;&#x2F;p&gt;
+&lt;p&gt;C&#x27;est dans cette optique que nous pouvons désormais sereinement introduire les concepts Kubernetes.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;quelques-infos-en-vrac&quot;&gt;Quelques infos en vrac&lt;&#x2F;h3&gt;
+&lt;p&gt;Exemple de toolbox minimaliste: &lt;a href=&quot;https:&#x2F;&#x2F;www.busybox.net&quot;&gt;Busybox&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Outil d&#x27;introspection des layers des images: &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;wagoodman&#x2F;dive&quot;&gt;Dive&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Container runtime de docker: &lt;a href=&quot;https:&#x2F;&#x2F;containerd.io&quot;&gt;Containerd&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Docker multistage building: &lt;a href=&quot;https:&#x2F;&#x2F;docs.docker.com&#x2F;develop&#x2F;develop-images&#x2F;multistage-build&quot;&gt;Multistage building&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>Kubernetes Installation</title>
+		<published>2021-12-09T09:19:42+00:00</published>
+		<updated>2021-12-09T09:19:42+00:00</updated>
+		<link href="https://masterclassk8s.github.io/blog/kubernetes-installation/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/blog/kubernetes-installation/</id>
+		<content type="html">&lt;h2 id=&quot;manual-installation-with-kubeadm&quot;&gt;Manual installation with kubeadm&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;v1-18.docs.kubernetes.io&#x2F;docs&#x2F;setup&#x2F;production-environment&#x2F;tools&#x2F;kubeadm&#x2F;create-cluster-kubeadm&#x2F;&quot;&gt;Create cluster from scratch with kubeadm&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;installation-on-aws&quot;&gt;Installation on AWS&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;v1-18.docs.kubernetes.io&#x2F;docs&#x2F;setup&#x2F;production-environment&#x2F;tools&#x2F;kops&#x2F;&quot;&gt;Cluster install on AWS with KOPS&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;v1-18.docs.kubernetes.io&#x2F;docs&#x2F;setup&#x2F;production-environment&#x2F;turnkey&#x2F;aws&#x2F;&quot;&gt;Classic way cluster install on AWS with Turnkey&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;kubernetes-on-openstack&quot;&gt;Kubernetes on openstack&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;superuser.openstack.org&#x2F;articles&#x2F;run-your-kubernetes-cluster-on-openstack-in-production&#x2F;&quot;&gt;Installing Kubernetes on OpenStack&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.openstack.org&#x2F;videos&#x2F;summits&#x2F;berlin-2018&#x2F;running-kubernetes-on-openstack-and-bare-metal&quot;&gt;Installing Kubernetes on OpenStack and Bare-metal&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;automationlogic.com&#x2F;installing-open-stack-on-aws-by-george-tarnaras&#x2F;&quot;&gt;Installing Kubernetes on OpenStack and AWS the hard way&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;after-poc-on-aws&quot;&gt;After POC on AWS...&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;the-hard-way-kops&quot;&gt;The hard way, Kops&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;export &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;AWS_ACCESS_KEY_ID&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=&amp;quot;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;export &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;AWS_SECRET_ACCESS_KEY&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=&amp;quot;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;export &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;AWS_DEFAULT_REGION&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=&amp;quot;&amp;quot;
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;aws&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; sts get-caller-identity
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;curl -LO&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; https:&#x2F;&#x2F;github.com&#x2F;kubernetes&#x2F;kops&#x2F;releases&#x2F;download&#x2F;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;curl -s&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; https:&#x2F;&#x2F;api.github.com&#x2F;repos&#x2F;kubernetes&#x2F;kops&#x2F;releases&#x2F;latest | &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;grep&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; tag_name | &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cut -d &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -f&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 4)&#x2F;kops-linux-amd64
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;chmod&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; +x kops-linux-amd64
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; mv kops-linux-amd64 &#x2F;usr&#x2F;local&#x2F;bin&#x2F;kops
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;aws&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; route53 create-hosted-zone&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; kolorado.e-monkeys.tech&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --caller-reference&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 10
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;dig&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; NS kolorado.e-monkeys.tech
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;aws&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; s3 mb s3:&#x2F;&#x2F;kolorado.e-monkeys.tech
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;export &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;KOPS_STATE_STORE&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;s3:&#x2F;&#x2F;kolorado.e-monkeys.tech
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kops&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; create cluster kolorado.e-monkeys.tech&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --cloud&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; aws&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --zones&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; us-east-2c
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kops&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; get cluster
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kops&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; edit cluster kolorado.e-monkeys.tech
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kops&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; edit ig&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=kolorado.e-monkeys.tech nodes
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kops&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; edit ig&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;=kolorado.e-monkeys.tech master-us-east
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kops&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; update cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; kolorado.e-monkeys.tech&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --yes --admin
+kops&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; rolling-update cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --cloudonly
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# get kubeconfig in s3:&#x2F;&#x2F;kolorado.e-monkeys.tech
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Using&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; cluster from kubectl context: kolorado.dev.e-monkeys.tech
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;NAME&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;                    STATUS  NEEDUPDATE      READY   MIN     TARGET  MAX
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;master-us-east-2c&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;       Ready   0               1       1       1       1
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;nodes-us-east-2c&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;        Ready   0               1       1       1       1
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kops&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; validate cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --wait&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 10m
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; get nodes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --show-labels
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h2 id=&quot;delete-cluster-with-kops&quot;&gt;Delete cluster with Kops&lt;&#x2F;h2&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kops&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; delete cluster kolorado.e-monkeys.tech&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --yes
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;the-easy-good-k8s-on-aws-way-eksctl&quot;&gt;The easy&#x2F;good K8s on AWS way, eksctl&lt;&#x2F;h3&gt;
+&lt;p&gt;Spawning nodes mode of eksctl:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Fargate - Linux - Sélectionnez ce type de nœud si vous souhaitez exécuter des applications Linux sur AWS Fargate. Fargate est un moteur de calcul sans serveur qui vous permet de déployer des pods Kubernetes sans gérer les instances Amazon EC2.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Nœuds gérés - Linux : sélectionnez ce type de nœud si vous souhaitez exécuter des applications Amazon Linux sur des instances Amazon EC2. Bien que cela ne soit pas abordé dans ce guide, vous pouvez également ajouter des nœuds autogérés et Bottlerocket Windows à votre cluster.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;curl --silent --location &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;weaveworks&#x2F;eksctl&#x2F;releases&#x2F;latest&#x2F;download&#x2F;eksctl_&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;uname -s&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;)_amd64.tar.gz&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; | &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;tar&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; xz&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -C&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; &#x2F;tmp
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; mv &#x2F;tmp&#x2F;eksctl &#x2F;usr&#x2F;local&#x2F;bin
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;02:34:48&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; pbackz@LAPTOP-UJNQHICP &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; → eksctl create cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; kolorado&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --region&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; us-east-2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --fargate
+2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  eksctl version 0.76.0
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  using region us-east-2
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  setting availability zones to &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;us-east-2a us-east-2b us-east-2c&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  subnets for us-east-2a - public:192.168.0.0&#x2F;19 private:192.168.96.0&#x2F;19
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  subnets for us-east-2b - public:192.168.32.0&#x2F;19 private:192.168.128.0&#x2F;19
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  subnets for us-east-2c - public:192.168.64.0&#x2F;19 private:192.168.160.0&#x2F;19
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  using Kubernetes version 1.21
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  creating EKS cluster &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kolorado&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; in &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;us-east-2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; region with Fargate profile
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  if you encounter any issues, check CloudFormation console or try &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl utils describe-stacks --region=us-east-2 --cluster=kolorado&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  CloudWatch logging will not be enabled for cluster &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kolorado&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; in &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;us-east-2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  you can enable it with &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=us-east-2 --cluster=kolorado&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  Kubernetes API endpoint access will use default of {publicAccess=true, privateAccess=false} for cluster &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kolorado&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; in &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;us-east-2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; sequential tasks: { create cluster control plane &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kolorado&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;,
+    2 sequential sub-tasks: {
+        wait for control plane to become ready,
+        create fargate profiles,
+    }
+}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  building cluster stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:14 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  deploying stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:35:44 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:36:14 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:37:15 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:38:15 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:39:16 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:40:16 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:41:16 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:42:17 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:43:17 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:44:18 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:45:18 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:46:19 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:47:19 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:48:19 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for CloudFormation stack &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;eksctl-kolorado-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:50:22 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  creating Fargate profile &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;fp-default&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; on EKS cluster &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kolorado&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:54:41 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  created Fargate profile &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;fp-default&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; on EKS cluster &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kolorado&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:57:13 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;coredns&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; is now schedulable onto Fargate
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:58:17 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;coredns&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; is now scheduled onto Fargate
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:58:17 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;coredns&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; pods are now scheduled onto Fargate
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:58:17 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  waiting for the control plane availability...
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:58:17 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;✔&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  saved kubeconfig as &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pbackz&#x2F;.kube&#x2F;config&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:58:17 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  no tasks
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:58:17 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;✔&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  all EKS cluster resources for &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kolorado&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; have been created
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:58:19 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;ℹ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  kubectl command should work with &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pbackz&#x2F;.kube&#x2F;config&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;, try &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kubectl get nodes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2021-12-14&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; 02:58:19 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;✔&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;  EKS cluster &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kolorado&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; in &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;us-east-2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot; region is ready
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# Validate installation
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;kubectl get pods&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --all-namespaces -o&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; wide
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# Delete cluster
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;eksctl delete cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; my-cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --region&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; region-code
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# Show config and hacks cli
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;alias k=&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kubectl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;k&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; config view
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;v1
+clusters&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;certificate-authority-data&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;DATA+OMITTED
+    server&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;https:&#x2F;&#x2F;D574D5657EED6B65990285B60D420EBB.gr7.us-east-2.eks.amazonaws.com
+  name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kolorado.us-east-2.eksctl.io
+contexts&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;context&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cluster&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kolorado.us-east-2.eksctl.io
+    user&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kolo@kolorado.us-east-2.eksctl.io
+  name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kolo@kolorado.us-east-2.eksctl.io
+current-context&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kolo@kolorado.us-east-2.eksctl.io
+kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Config
+preferences&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: {}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;users&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kolo@kolorado.us-east-2.eksctl.io
+  user&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;client.authentication.k8s.io&#x2F;v1alpha1
+      args&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;eks
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;get-token
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;--cluster-name
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;kolorado
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;--region
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;us-east-2
+      command&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;aws
+      env&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;AWS_STS_REGIONAL_ENDPOINTS
+        value&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;regional
+      interactiveMode&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;IfAvailable
+      provideClusterInfo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;false
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;https:&#x2F;&#x2F;github.com&#x2F;weaveworks&#x2F;eksctl&#x2F;tree&#x2F;main&#x2F;examples&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>FAQ</title>
+		<published>2021-05-01T19:30:00+00:00</published>
+		<updated>2021-05-01T19:30:00+00:00</updated>
+		<link href="https://masterclassk8s.github.io/docs/help/faq/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/docs/help/faq/</id>
+		<content type="html">&lt;h2 id=&quot;what-is-the-adidoks&quot;&gt;What is the AdiDoks?&lt;&#x2F;h2&gt;
+&lt;p&gt;AdiDoks is a Zola theme for Documentation&#x27;s sites, ported by the Hugo Theme
+&lt;a href=&quot;https:&#x2F;&#x2F;getdoks.org&quot;&gt;Doks&lt;&#x2F;a&gt;, which is a pretty nice theme. Thanks a lot to 
+&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;h-enk&quot;&gt;&lt;em&gt;h-enk&lt;&#x2F;em&gt;&lt;&#x2F;a&gt;, the creator of the &lt;a href=&quot;https:&#x2F;&#x2F;getdoks.org&quot;&gt;Doks&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;keyboard-shortcuts-for-search&quot;&gt;Keyboard shortcuts for search?&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;focus: &lt;code&gt;&#x2F;&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;select: &lt;code&gt;↓&lt;&#x2F;code&gt; and &lt;code&gt;↑&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;open: &lt;code&gt;Enter&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;close: &lt;code&gt;Esc&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;other-documentation&quot;&gt;Other documentation?&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;docs.netlify.com&#x2F;&quot;&gt;Netlify&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&#x2F;documentation&#x2F;getting-started&#x2F;overview&#x2F;&quot;&gt;Zola&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;contact-the-creator&quot;&gt;Contact the creator?&lt;&#x2F;h2&gt;
+&lt;p&gt;Send &lt;em&gt;Aaran Xu&lt;&#x2F;em&gt; an E-mail:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;mailto:aaranxu@outlook.com&quot;&gt;aaranxu@outlook.com&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>Quick Start</title>
+		<published>2021-05-01T08:20:00+00:00</published>
+		<updated>2021-05-01T08:20:00+00:00</updated>
+		<link href="https://masterclassk8s.github.io/docs/getting-started/quick-start/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/docs/getting-started/quick-start/</id>
+		<content type="html">&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;&#x2F;h2&gt;
+&lt;p&gt;Before using the theme, you need to install the &lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&#x2F;documentation&#x2F;getting-started&#x2F;installation&#x2F;&quot;&gt;Zola&lt;&#x2F;a&gt; ≥ 0.13.0.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;run-the-theme-directly&quot;&gt;Run the Theme Directly&lt;&#x2F;h2&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; clone https:&#x2F;&#x2F;github.com&#x2F;aaranxu&#x2F;adidoks.git
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;cd&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; adidoks
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;zola&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; serve
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Visit &lt;code&gt;http:&#x2F;&#x2F;127.0.0.1:1111&#x2F;&lt;&#x2F;code&gt; in the browser.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;&#x2F;h2&gt;
+&lt;p&gt;Just earlier we showed you how to run the theme directly. Now we start to
+install the theme in an existing site step by step.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;step-1-create-a-new-zola-site&quot;&gt;Step 1: Create a new zola site&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;zola&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; init mysite
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;step-2-install-adidoks&quot;&gt;Step 2: Install AdiDoks&lt;&#x2F;h3&gt;
+&lt;p&gt;Download this theme to your themes directory:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;cd&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; mysite&#x2F;themes
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; clone https:&#x2F;&#x2F;github.com&#x2F;aaranxu&#x2F;adidoks.git
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Or install as a submodule:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;cd&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; mysite
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; init  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# if your project is a git repository already, ignore this command
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;git submodule add https:&#x2F;&#x2F;github.com&#x2F;aaranxu&#x2F;adidoks.git themes&#x2F;adidoks
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;step-3-configuration&quot;&gt;Step 3: Configuration&lt;&#x2F;h3&gt;
+&lt;p&gt;Enable the theme in your &lt;code&gt;config.toml&lt;&#x2F;code&gt; in the site derectory:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-toml&quot; data-lang=&quot;toml&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;theme &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;adidoks&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Or copy the &lt;code&gt;config.toml.example&lt;&#x2F;code&gt; from the theme directory to your project&#x27;s
+root directory:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cp&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; themes&#x2F;adidoks&#x2F;config.toml.example config.toml
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;step-4-add-new-content&quot;&gt;Step 4: Add new content&lt;&#x2F;h3&gt;
+&lt;p&gt;You can copy the content from the theme directory to your project:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cp -r&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; themes&#x2F;adidoks&#x2F;content .
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;You can modify or add new posts in the &lt;code&gt;content&#x2F;blog&lt;&#x2F;code&gt;, &lt;code&gt;content&#x2F;docs&lt;&#x2F;code&gt; or other
+content directories as needed.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;step-5-run-the-project&quot;&gt;Step 5: Run the project&lt;&#x2F;h3&gt;
+&lt;p&gt;Just run &lt;code&gt;zola serve&lt;&#x2F;code&gt; in the root path of the project:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;zola&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; serve
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;AdiDoks will start the Zola development web server accessible by default at 
+&lt;code&gt;http:&#x2F;&#x2F;127.0.0.1:1111&lt;&#x2F;code&gt;. Saved changes will live reload in the browser.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="fr">
+		<title>Introduction</title>
+		<published>2021-05-01T08:00:00+00:00</published>
+		<updated>2021-05-01T08:00:00+00:00</updated>
+		<link href="https://masterclassk8s.github.io/docs/getting-started/introduction/" type="text/html"/>
+		<id>https://masterclassk8s.github.io/docs/getting-started/introduction/</id>
+		<content type="html">&lt;h2 id=&quot;quick-start&quot;&gt;Quick Start&lt;&#x2F;h2&gt;
+&lt;p&gt;One page summary of how to start a new AdiDoks project. &lt;a href=&quot;..&#x2F;quick-start&#x2F;&quot;&gt;Quick Start →&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;go-further&quot;&gt;Go further&lt;&#x2F;h2&gt;
+&lt;p&gt;Contributing and Help.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;contributing&quot;&gt;Contributing&lt;&#x2F;h2&gt;
+&lt;p&gt;Find out how to contribute to Doks. &lt;a href=&quot;..&#x2F;..&#x2F;contributing&#x2F;how-to-contribute&#x2F;&quot;&gt;Contributing →&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;help&quot;&gt;Help&lt;&#x2F;h2&gt;
+&lt;p&gt;Get help on Doks. &lt;a href=&quot;..&#x2F;..&#x2F;help&#x2F;faq&#x2F;&quot;&gt;Help →&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+	</entry>
+</feed>
